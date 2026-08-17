@@ -1,159 +1,599 @@
   <!DOCTYPE html>
-  <html>
-  <head>
-      <title>YOU'VE BEEN SUPER MEGA ULTRA PEANUTED!</title>
-      <style>
-          body {
-              background-color: #FFE4B5;
-              font-family: 'Comic Sans MS', cursive;
-              text-align: center;
-              animation: rainbow 1s infinite;
-              cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><text y="16" font-size="16">🥜</text></svg>'), auto;
-              overflow-x: hidden;
-          }
-        
-          @keyframes rainbow {
-              0% {background-color: #FFE4B5;}
-              20% {background-color: #FFA07A;}
-              40% {background-color: #98FB98;}
-              60% {background-color: #87CEEB;}
-              80% {background-color: #DDA0DD;}
-              100% {background-color: #FFE4B5;}
-          }
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I-84: Idaho to Pendleton — Roadcams</title>
+<style>
+  :root{
+    --asphalt:#1b1d1f;
+    --asphalt-2:#232629;
+    --line-yellow:#f2b90c;
+    --sign-green:#0a6b3d;
+    --sign-green-bright:#12874b;
+    --fog:#c9cdd1;
+    --fog-dim:#8b9196;
+    --unfilled:#3a2f1a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--asphalt);
+    background-image:
+      repeating-linear-gradient(90deg, transparent 0 78px, rgba(242,185,12,0.08) 78px 84px, transparent 84px 160px);
+    color:var(--fog);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    min-height:100vh;
+  }
+  header{
+    padding:28px 24px 18px;
+    border-bottom:3px solid var(--line-yellow);
+    background:linear-gradient(180deg, #141618, var(--asphalt));
+  }
+  header h1{
+    margin:0;
+    font-size:1.5rem;
+    letter-spacing:0.5px;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  header h1 .badge{
+    background:var(--sign-green);
+    border:2px solid #fff;
+    border-radius:6px;
+    padding:2px 8px;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:1px;
+    white-space:nowrap;
+  }
+  header p{
+    margin:8px 0 0;
+    color:var(--fog-dim);
+    font-size:0.88rem;
+    max-width:70ch;
+    line-height:1.5;
+  }
+  header p a{ color:#8fd6ac; }
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    padding:14px 24px;
+    background:var(--asphalt-2);
+    border-bottom:1px solid #313539;
+    position:sticky;
+    top:0;
+    z-index:5;
+  }
+  button{
+    font:inherit;
+    cursor:pointer;
+    border:none;
+    border-radius:4px;
+    padding:9px 14px;
+    font-weight:600;
+    font-size:0.85rem;
+  }
+  .btn-primary{ background:var(--sign-green-bright); color:#fff; }
+  .btn-primary:hover{ background:#159e5c; }
+  .btn-ghost{ background:transparent; color:var(--fog); border:1px solid #3d4247; }
+  .btn-ghost:hover{ border-color:var(--fog-dim); }
+  .btn-small{
+    background:#2a2f33; color:var(--fog); border:1px solid #3d4247;
+    padding:6px 10px; font-size:0.72rem;
+  }
+  .btn-small:hover{ border-color:var(--sign-green-bright); color:#fff; }
+  select{
+    font:inherit; background:#15171a; color:var(--fog);
+    border:1px solid #3d4247; border-radius:4px; padding:8px 10px; font-size:0.85rem;
+  }
+  .toolbar .spacer{ flex:1; }
+  .status{ font-size:0.78rem; color:var(--fog-dim); }
 
-          .peanut {
-              width: 300px;
-              animation: crazyDance 0.8s infinite;
-              margin-top: 50px;
-              transition: transform 0.3s;
-              filter: drop-shadow(0 0 10px gold);
-          }
+  main{ padding:22px 24px 60px; max-width:1100px; margin:0 auto; }
 
-          .peanut:hover {
-              transform: scale(1.5) rotate(720deg);
-              transition: all 0.5s ease-in-out;
-          }
+  .route-line{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:6px;
+    font-size:0.75rem;
+    color:var(--fog-dim);
+    flex-wrap:wrap;
+  }
+  .route-line .end{ color:#fff; font-weight:700; }
+  .route-line .arrow{ color:var(--line-yellow); }
+  .direction-note{
+    font-size:0.72rem;
+    color:var(--fog-dim);
+    margin-bottom:22px;
+  }
 
-          @keyframes crazyDance {
-              0% { transform: rotate(0deg) scale(1) translateX(0); }
-              25% { transform: rotate(-15deg) scale(1.1) translateX(-50px); }
-              50% { transform: rotate(0deg) scale(1) translateX(0); }
-              75% { transform: rotate(15deg) scale(1.1) translateX(50px); }
-              100% { transform: rotate(0deg) scale(1) translateX(0); }
-          }
+  .stop{
+    display:grid;
+    grid-template-columns:44px 1fr;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  .stop .marker{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .stop .dot{
+    width:14px; height:14px; border-radius:50%;
+    background:var(--unfilled);
+    border:2px solid var(--fog-dim);
+    flex-shrink:0;
+  }
+  .stop.filled .dot{ background:var(--sign-green-bright); border-color:var(--sign-green-bright); }
+  .stop .thread{
+    flex:1;
+    width:2px;
+    background:#3d4247;
+    margin-top:2px;
+  }
+  .stop:last-child .thread{ display:none; }
 
-          h1 {
-              font-size: 70px;
-              color: #8B4513;
-              text-shadow: 3px 3px 0px #FFD700, 6px 6px 0px #FF6B6B, 9px 9px 0px #98FB98;
-              animation: wobble 2s infinite;
-              letter-spacing: 2px;
-          }
+  .card{
+    background:var(--asphalt-2);
+    border:1px solid #313539;
+    border-radius:8px;
+    padding:14px 16px;
+  }
+  .card .top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .card .name{ font-weight:700; color:#fff; font-size:0.95rem; }
+  .card .hint{ font-size:0.72rem; color:var(--fog-dim); margin-top:2px; }
 
-          @keyframes wobble {
-              0%, 100% { transform: skew(0deg) scale(1); }
-              25% { transform: skew(5deg) scale(1.1); }
-              75% { transform: skew(-5deg) scale(0.9); }
-          }
+  .card .body{ margin-top:10px; }
+  .cams-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .cam-tile{ width:220px; }
+  .cam-tile .cam-label{
+    font-size:0.72rem;
+    color:var(--fog-dim);
+    margin-bottom:6px;
+    display:flex;
+    justify-content:space-between;
+    gap:6px;
+  }
 
-          .credit {
-              position: fixed;
-              bottom: 10px;
-              right: 10px;
-              font-size: 24px;
-              color: #8B4513;
-              animation: spin 3s infinite;
-              background: rgba(255,255,255,0.3);
-              padding: 10px;
-              border-radius: 50%;
-              box-shadow: 0 0 20px rgba(255,215,0,0.5);
-          }
+  .placeholder-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .placeholder-row input[type=text]{
+    flex:1;
+    min-width:220px;
+    font:inherit;
+    background:#15171a;
+    color:var(--fog);
+    border:1px solid #3d4247;
+    border-radius:4px;
+    padding:8px 10px;
+    font-size:0.82rem;
+  }
 
-          @keyframes spin {
-              0% { transform: rotate(0deg) scale(1); }
-              50% { transform: rotate(180deg) scale(1.2); }
-              100% { transform: rotate(360deg) scale(1); }
-          }
+  .imgwrap{
+    position:relative;
+    width:100%;
+    aspect-ratio:4/3;
+    background:#0e0f10;
+    border-radius:6px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .imgwrap img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .imgwrap .fallback{
+    position:absolute; inset:0; display:none;
+    align-items:center; justify-content:center; flex-direction:column; gap:6px;
+    color:var(--fog-dim); font-size:0.72rem; text-align:center; padding:10px;
+  }
+  .imgwrap.errored img{ display:none; }
+  .imgwrap.errored .fallback{ display:flex; }
 
-          .bounce {
-              animation: superBounce 1s infinite;
-              position: relative;
-          }
+  .cam-tile .actions{
+    display:flex;
+    gap:6px;
+    margin-top:6px;
+  }
 
-          @keyframes superBounce {
-              0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-              50% { transform: translateY(-60px) rotate(360deg) scale(1.2); }
-          }
+  .other-section{
+    margin-top:34px;
+    padding-top:20px;
+    border-top:1px dashed #3d4247;
+  }
+  .other-section h2{ font-size:1rem; color:#fff; margin:0 0 4px; }
+  .other-section p{ font-size:0.8rem; color:var(--fog-dim); margin:0 0 14px; }
+  .add-form{
+    background:var(--asphalt-2);
+    border:1px dashed #3d4247;
+    border-radius:8px;
+    padding:14px 16px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:flex-end;
+    margin-bottom:16px;
+  }
+  .add-form label{ display:flex; flex-direction:column; gap:4px; font-size:0.72rem; color:var(--fog-dim); }
+  .add-form .field-wide{ flex:1; min-width:220px; }
+  .add-form input[type=text]{
+    font:inherit; background:#15171a; color:var(--fog);
+    border:1px solid #3d4247; border-radius:4px; padding:8px 10px; font-size:0.85rem;
+  }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:14px; }
+  .other-card{
+    background:var(--asphalt-2); border:1px solid #313539; border-radius:8px; padding:12px;
+  }
+  .other-card .name{ font-weight:700; color:#fff; font-size:0.85rem; margin-bottom:8px; }
+  .other-card .row{ display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:8px; }
 
-          h2 {
-              font-size: 42px;
-              color: #FF6B6B;
-              text-shadow: 2px 2px 0px #FFD700, 4px 4px 0px #8B4513;
-              animation: pulse 1s infinite;
-              margin-top: 30px;
-          }
+  footer{
+    padding:18px 24px 40px;
+    color:var(--fog-dim);
+    font-size:0.75rem;
+    border-top:1px solid #313539;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  footer a{ color:var(--fog); }
+</style>
+</head>
+<body>
 
-          @keyframes pulse {
-              0% { transform: scale(1) rotate(0deg); }
-              50% { transform: scale(1.2) rotate(5deg); }
-              100% { transform: scale(1) rotate(0deg); }
-          }
+<header>
+  <h1><span class="badge">TripCheck</span> I-84 &middot; Idaho border → Pendleton</h1>
+  <p>
+    Live roadcam stills in true highway order — farthest from Pendleton (closest to Idaho) at the top,
+    working down the road as you go. Multiple cameras at the same spot (like both directions at Farewell
+    Bend) are grouped together. Camera courtesy of ODOT.
+  </p>
+</header>
 
-          .peanut-rain {
-              position: fixed;
-              font-size: 24px;
-              animation: fall linear infinite;
-              z-index: -1;
-          }
+<div class="toolbar">
+  <button class="btn-primary" id="refreshAll">Refresh all</button>
+  <label style="display:flex;align-items:center;gap:6px;font-size:0.8rem;">
+    <input type="checkbox" id="autoToggle"> Auto-refresh every
+  </label>
+  <select id="autoInterval">
+    <option value="15">15s</option>
+    <option value="30" selected>30s</option>
+    <option value="60">60s</option>
+    <option value="300">5 min</option>
+  </select>
+  <div class="spacer"></div>
+  <span class="status" id="statusLine"></span>
+</div>
 
-          @keyframes fall {
-              0% { transform: translateY(-100vh); }
-              100% { transform: translateY(100vh); }
-          }
-      </style>
-  </head>
-  <body>
-      <img src="peanut.webp" class="peanut" alt="Dancing Peanut">
-      <h1 class="bounce">HAH! YOU'VE BEEN MEGA-ULTRA-PEANUTED! 🥜✨</h1>
-      <h2>Prepare for the ULTIMATE nutty experience! 🎉</h2>
-      <div class="credit">Requested by LP 🥜😎✨</div>
-    
-      <script>
-          document.querySelector('.peanut').addEventListener('click', function() {
-              alert('SUPER MEGA ULTRA PEANUT POWER ACTIVATED! 🥜✨');
-              document.body.style.animation = 'rainbow 0.3s infinite';
-              createPeanutRain();
-          });
+<main>
+  <div class="route-line">
+    <span class="end">Idaho border</span>
+    <span class="arrow">— I-84 W —</span>
+    <span>Ontario</span>
+    <span class="arrow">›</span>
+    <span>Baker City</span>
+    <span class="arrow">›</span>
+    <span>La Grande</span>
+    <span class="arrow">›</span>
+    <span>Cabbage Hill / Deadman Pass</span>
+    <span class="arrow">›</span>
+    <span>Meacham</span>
+    <span class="arrow">›</span>
+    <span class="end">Pendleton</span>
+  </div>
+  <div class="direction-note">Ordered by milepost, highest (Idaho line) at top to lowest (Pendleton) at bottom.</div>
 
-          function createPeanutRain() {
-              for(let i = 0; i < 50; i++) {
-                  const peanut = document.createElement('div');
-                  peanut.className = 'peanut-rain';
-                  peanut.style.left = Math.random() * 100 + 'vw';
-                  peanut.style.animationDuration = (Math.random() * 2 + 1) + 's';
-                  peanut.innerHTML = '🥜';
-                  document.body.appendChild(peanut);
-              }
-          }
+  <div id="route"></div>
 
-          setInterval(() => {
-              const emojis = ['🥜', '✨', '🎉', '💫', '⚡', '🌟', '💥', '🎪'];
-              const h2 = document.querySelector('h2');
-              h2.innerHTML += emojis[Math.floor(Math.random() * emojis.length)];
-          }, 800);
+  <div class="other-section">
+    <h2>Add any other camera</h2>
+    <p>For cameras that don't fit this stretch — they'll show here rather than in the ordered list above.</p>
+    <div class="add-form">
+      <label class="field-wide">Paste a TripCheck camera image URL
+        <input type="text" id="addUrl" placeholder="https://www.tripcheck.com/roadcams/cams/Some Camera_pid1234.JPG">
+      </label>
+      <label>Display name (optional)
+        <input type="text" id="addUrlName" placeholder="e.g. La Grande - Adams Ave">
+      </label>
+      <button class="btn-ghost" id="addUrlBtn">Add camera</button>
+    </div>
+    <div class="grid" id="otherGrid"></div>
+  </div>
+</main>
 
-          document.addEventListener('mousemove', (e) => {
-              const x = e.pageX;
-              const y = e.pageY;
-              const sparkle = document.createElement('div');
-              sparkle.innerHTML = '✨';
-              sparkle.style.position = 'absolute';
-              sparkle.style.left = x + 'px';
-              sparkle.style.top = y + 'px';
-              sparkle.style.animation = 'pulse 1s forwards';
-              document.body.appendChild(sparkle);
-              setTimeout(() => sparkle.remove(), 1000);
-          });
-      </script>
-  </body>
-  </html>
+<footer>
+  <strong>How to fill in a stop:</strong> open the
+  <a href="https://www.tripcheck.com/DynamicReports/Report/Cameras/3" target="_blank">Northeast Oregon camera list</a>
+  or the <a href="https://www.tripcheck.com/DynamicReports/Report/Cameras/6" target="_blank">East Oregon camera list</a>
+  (covers the Ontario/Idaho-border end), find the matching camera, open its image, then copy the image address
+  and paste it into that stop's box below. It'll look like
+  <code>https://www.tripcheck.com/roadcams/cams/NAME_pidNNNN.JPG</code>.
+  <br><br>
+  Images are pulled live and directly from tripcheck.com with a cache-busting parameter on each refresh —
+  this page doesn't store or proxy anything. Per ODOT's FAQ, camera images are available for public use with
+  credit ("Camera courtesy of ODOT"). Unofficial tool, not affiliated with ODOT.
+</footer>
+
+<script>
+  // Ordered Idaho border -> Pendleton by milepost (highest MP first).
+  // Each location can hold multiple camera angles in `cams`.
+  // Leave url: null for a cam slot you haven't filled in yet.
+  let locations = [
+    {
+      name: "Idaho line — I-84 at US-95 Jct",
+      hint: "Near the OR/ID border",
+      cams: [ { label: "EB", url: null } ]
+    },
+    {
+      name: "Ontario — OR201N at I-84 (Snake River)",
+      hint: "~MP 356",
+      cams: [
+        { label: "WB Onramp", url: "https://tripcheck.com/RoadCams/cams/ORE201N at I-84 WB Onramp_pid3674.JPG" },
+        { label: "EB Onramp", url: "https://tripcheck.com/RoadCams/cams/ORE201N at I-84 EB Onramp_pid3907.JPG" }
+      ]
+    },
+    {
+      name: "I-84 at Farewell Bend MP353",
+      hint: "~MP 353",
+      cams: [
+        { label: "E", url: "https://tripcheck.com/RoadCams/cams/I-84 at Farewell Bend 353 E_pid4686.jpg" },
+        { label: "W", url: "https://tripcheck.com/RoadCams/cams/I-84 at Farewell Bend 353 W_pid4688.jpg" }
+      ]
+    },
+    {
+      name: "I-84 at Farewell Bend",
+      hint: "~MP 352",
+      cams: [
+        { label: "WB", url: "https://tripcheck.com/RoadCams/cams/I-84 at Farewell Bend WB_pid3690.JPG" },
+        { label: "EB", url: "https://tripcheck.com/RoadCams/cams/I-84 at Farewell Bend EB_pid3686.JPG" }
+      ]
+    },
+    {
+      name: "I-84 at Weatherby Rest Area",
+      hint: "~MP 335.76",
+      cams: [ { label: "Looking East", url: null } ]
+    },
+    {
+      name: "I-84 at Pleasant Valley",
+      hint: "",
+      cams: [ { label: "WB", url: "https://tripcheck.com/RoadCams/cams/I-84 at Pleasant Valley WB_pid5138.jpg" } ]
+    },
+    {
+      name: "I-84 at Baker Valley Rest Area",
+      hint: "Baker City area",
+      cams: [ { label: "", url: null } ]
+    },
+    {
+      name: "I-84 at North Powder",
+      hint: "",
+      cams: [ { label: "", url: null } ]
+    },
+    {
+      name: "I-84 at Ladd Creek",
+      hint: "La Grande area",
+      cams: [ { label: "", url: null } ]
+    },
+    {
+      name: "I-84 at Mission",
+      hint: "",
+      cams: [ { label: "", url: null } ]
+    },
+    {
+      name: "I-84 at Cabbage Hill / Deadman Pass",
+      hint: "Notorious truck grade",
+      cams: [ { label: "", url: null } ]
+    },
+    {
+      name: "I-84 at Meacham",
+      hint: "",
+      cams: [ { label: "", url: null } ]
+    },
+    {
+      name: "I-84 at Pendleton",
+      hint: "",
+      cams: [ { label: "", url: null } ]
+    }
+  ];
+
+  let otherCams = []; // { label, url } — anything that doesn't fit the ordered stretch
+
+  const routeEl = document.getElementById('route');
+  const otherGrid = document.getElementById('otherGrid');
+  const statusLine = document.getElementById('statusLine');
+
+  function withCacheBuster(rawUrl) {
+    const sep = rawUrl.includes('?') ? '&' : '?';
+    const base = rawUrl.replace(/([?&])rand=\d+/, '$1').replace(/[?&]$/, '');
+    return `${base}${sep}rand=${Date.now()}`;
+  }
+
+  // Preloads the new frame off-screen and only swaps it into the visible <img>
+  // once it's fully loaded, so the old frame never blanks/flashes during a refresh
+  // (mobile Safari in particular will blank an <img> the instant .src is reassigned).
+  function refreshImage(imgEl, wrapEl, tsEl) {
+    const baseUrl = imgEl.dataset.url;
+    if (!baseUrl) return;
+    const nextUrl = withCacheBuster(baseUrl);
+    const preload = new Image();
+    preload.onload = () => {
+      imgEl.src = nextUrl;
+      wrapEl.classList.remove('errored');
+      if (tsEl) tsEl.textContent = new Date().toLocaleTimeString();
+    };
+    preload.onerror = () => {
+      wrapEl.classList.add('errored');
+      if (tsEl) tsEl.textContent = 'error';
+    };
+    preload.src = nextUrl;
+  }
+
+  function renderRoute() {
+    routeEl.innerHTML = '';
+    locations.forEach((loc, li) => {
+      const anyFilled = loc.cams.some(c => c.url);
+      const wrap = document.createElement('div');
+      wrap.className = 'stop' + (anyFilled ? ' filled' : '');
+      wrap.innerHTML = `
+        <div class="marker"><div class="dot"></div><div class="thread"></div></div>
+        <div class="card">
+          <div class="top-row">
+            <div>
+              <div class="name">${loc.name}</div>
+              ${loc.hint ? `<div class="hint">${loc.hint}</div>` : ''}
+            </div>
+          </div>
+          <div class="body cams-row" id="body-${li}"></div>
+        </div>
+      `;
+      routeEl.appendChild(wrap);
+      const body = document.getElementById(`body-${li}`);
+      loc.cams.forEach((cam, ci) => renderCamTile(body, li, ci, cam));
+    });
+  }
+
+  function renderCamTile(body, li, ci, cam) {
+    const uid = `${li}-${ci}`;
+    const tile = document.createElement('div');
+    tile.className = 'cam-tile';
+    if (!cam.url) {
+      tile.innerHTML = `
+        ${cam.label ? `<div class="cam-label">${cam.label}</div>` : ''}
+        <div class="placeholder-row">
+          <input type="text" id="input-${uid}" placeholder="Paste image URL…">
+          <button class="btn-small" data-set="${uid}">Set</button>
+        </div>
+      `;
+      body.appendChild(tile);
+      tile.querySelector('[data-set]').addEventListener('click', () => {
+        const val = document.getElementById(`input-${uid}`).value.trim();
+        if (!val) return;
+        locations[li].cams[ci].url = val;
+        renderRoute();
+      });
+      return;
+    }
+    tile.innerHTML = `
+      <div class="cam-label"><span>${cam.label || ''}</span><span class="ts" id="ts-${uid}"></span></div>
+      <div class="imgwrap" id="wrap-${uid}">
+        <img id="img-${uid}" src="${withCacheBuster(cam.url)}" alt="${cam.label}">
+        <div class="fallback">Unavailable.<br>Try refresh.</div>
+      </div>
+      <div class="actions">
+        <button class="btn-small" data-refresh="${uid}">Refresh</button>
+        <button class="btn-small" data-clear="${uid}">Change URL</button>
+      </div>
+    `;
+    body.appendChild(tile);
+    const img = document.getElementById(`img-${uid}`);
+    const wrapEl = document.getElementById(`wrap-${uid}`);
+    img.addEventListener('load', () => {
+      wrapEl.classList.remove('errored');
+      document.getElementById(`ts-${uid}`).textContent = new Date().toLocaleTimeString();
+    });
+    img.addEventListener('error', () => {
+      wrapEl.classList.add('errored');
+      document.getElementById(`ts-${uid}`).textContent = 'error';
+    });
+    tile.querySelector('[data-refresh]').addEventListener('click', () => {
+      img.src = withCacheBuster(cam.url);
+    });
+    tile.querySelector('[data-clear]').addEventListener('click', () => {
+      locations[li].cams[ci].url = null;
+      renderRoute();
+    });
+  }
+
+  function renderOther() {
+    otherGrid.innerHTML = '';
+    otherCams.forEach((cam, i) => {
+      const card = document.createElement('div');
+      card.className = 'other-card';
+      card.innerHTML = `
+        <div class="name">${cam.label}</div>
+        <div class="imgwrap" id="owrap-${i}">
+          <img id="oimg-${i}" src="${withCacheBuster(cam.url)}" alt="${cam.label}">
+          <div class="fallback">Unavailable.</div>
+        </div>
+        <div class="row">
+          <span class="ts" id="ots-${i}"></span>
+          <div style="display:flex;gap:6px;">
+            <button class="btn-small" data-orefresh="${i}">Refresh</button>
+            <button class="btn-small" data-oremove="${i}">Remove</button>
+          </div>
+        </div>
+      `;
+      otherGrid.appendChild(card);
+      const img = card.querySelector(`#oimg-${i}`);
+      const wrapEl = card.querySelector(`#owrap-${i}`);
+      img.addEventListener('load', () => {
+        wrapEl.classList.remove('errored');
+        card.querySelector(`#ots-${i}`).textContent = new Date().toLocaleTimeString();
+      });
+      img.addEventListener('error', () => {
+        wrapEl.classList.add('errored');
+        card.querySelector(`#ots-${i}`).textContent = 'error';
+      });
+      card.querySelector('[data-orefresh]').addEventListener('click', () => { img.src = withCacheBuster(cam.url); });
+      card.querySelector('[data-oremove]').addEventListener('click', () => { otherCams.splice(i,1); renderOther(); });
+    });
+  }
+
+  document.getElementById('addUrlBtn').addEventListener('click', () => {
+    const urlInput = document.getElementById('addUrl');
+    const nameInput = document.getElementById('addUrlName');
+    const url = urlInput.value.trim();
+    if (!url) return;
+    let label = nameInput.value.trim();
+    if (!label) {
+      const match = url.match(/cams\/([^_]+)_pid/);
+      label = match ? decodeURIComponent(match[1]) : 'Camera';
+    }
+    otherCams.push({ label, url });
+    urlInput.value = '';
+    nameInput.value = '';
+    renderOther();
+  });
+
+  function refreshAll() {
+    document.querySelectorAll('.imgwrap img').forEach(img => {
+      if (!img.src) return;
+      img.src = withCacheBuster(img.src);
+    });
+    statusLine.textContent = 'Last refreshed ' + new Date().toLocaleTimeString();
+  }
+  document.getElementById('refreshAll').addEventListener('click', refreshAll);
+
+  let autoTimer = null;
+  const autoToggle = document.getElementById('autoToggle');
+  const autoInterval = document.getElementById('autoInterval');
+  function updateAutoRefresh() {
+    if (autoTimer) clearInterval(autoTimer);
+    if (autoToggle.checked) autoTimer = setInterval(refreshAll, (+autoInterval.value) * 1000);
+  }
+  autoToggle.addEventListener('change', updateAutoRefresh);
+  autoInterval.addEventListener('change', updateAutoRefresh);
+
+  renderRoute();
+  renderOther();
+</script>
+
+</body>
+</html>
